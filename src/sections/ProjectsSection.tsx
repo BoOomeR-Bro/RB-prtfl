@@ -1,101 +1,34 @@
 import React from 'react';
-import { Layers, Server, Activity, Wrench, CheckCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Layers, Server, Activity, Wrench, Check, ArrowUpRight } from 'lucide-react';
 import { projectsData } from '../data/projects';
 import { SectionHeader } from '../components/SectionHeader';
-import { MotionReveal } from '../components/MotionReveal';
 
-const projectCategoryIcons: Record<string, React.ReactNode> = {
-  'Внутренние сервисы & Автоматизация': <Layers className="w-5 h-5 text-terminal-green" />,
-  'Системы учёта & Диагностика': <Wrench className="w-5 h-5 text-terminal-cyan" />,
-  'Инфраструктурный мониторинг': <Activity className="w-5 h-5 text-terminal-green" />,
-  'Корпоративная виртуализация': <Server className="w-5 h-5 text-terminal-cyan" />,
+const icons: Record<string, React.ReactNode> = {
+  'Внутренние сервисы & Автоматизация': <Layers size={19}/>,
+  'Системы учёта & Диагностика': <Wrench size={19}/>,
+  'Инфраструктурный мониторинг': <Activity size={19}/>,
+  'Корпоративная виртуализация': <Server size={19}/>,
 };
 
-export const ProjectsSection: React.FC = () => {
-  return (
-    <section id="projects" className="py-20 bg-graphite-900/40 relative border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <MotionReveal direction="up" distance={30}>
-          <SectionHeader
-            badge="// 04. PROJECTS"
-            title="Инженерные решения"
-            description="Реализованные внутренние сервисы, конфигурации систем мониторинга и виртуализации, подтверждённые профессиональным опытом."
-          />
-        </MotionReveal>
-
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {projectsData.map((project, idx) => (
-            <MotionReveal
-              key={project.id}
-              direction="up"
-              distance={45}
-              delay={idx % 2 === 0 ? 0 : 0.12}
-              scale
-            >
-              <div className="h-full p-6 sm:p-7 rounded-2xl bg-graphite-900/90 border border-slate-800 hover:border-slate-700 hover:bg-graphite-850/80 transition-all duration-300 flex flex-col justify-between group shadow-xl hover:shadow-glow-green hover:-translate-y-2">
-                <div>
-                  {/* Top Card Bar */}
-                  <div className="flex items-center justify-between gap-3 mb-4">
-                    <div className="flex items-center gap-2.5">
-                      <div className="w-9 h-9 rounded-lg bg-graphite-950 border border-slate-800 flex items-center justify-center shrink-0 group-hover:border-slate-700 transition-colors">
-                        {projectCategoryIcons[project.category] || (
-                          <Layers className="w-5 h-5 text-terminal-green" />
-                        )}
-                      </div>
-                      <span className="text-xs font-mono text-slate-400">
-                        {project.category}
-                      </span>
-                    </div>
-
-                    {project.statusLabel && (
-                      <span className="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-medium bg-emerald-950/60 text-terminal-green border border-terminal-green/30">
-                        {project.statusLabel}
-                      </span>
-                    )}
-                  </div>
-
-                  {/* Project Title */}
-                  <h3 className="text-lg sm:text-xl font-bold text-white mb-3 group-hover:text-terminal-accent transition-colors">
-                    {project.title}
-                  </h3>
-
-                  {/* Description */}
-                  <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                    {project.description}
-                  </p>
-
-                  {/* Architecture & Engineering Highlights */}
-                  <div className="space-y-2.5 mb-6 bg-graphite-950/60 p-4 rounded-xl border border-slate-850">
-                    <div className="text-[11px] font-mono text-slate-400 uppercase tracking-wider">
-                      Инженерные особенности:
-                    </div>
-                    {project.architectureHighlights.map((highlight, hIdx) => (
-                      <div key={hIdx} className="flex items-start gap-2 text-xs text-slate-300">
-                        <CheckCircle className="w-3.5 h-3.5 text-terminal-green shrink-0 mt-0.5" />
-                        <span className="leading-snug">{highlight}</span>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Technologies Badges */}
-                <div className="pt-4 border-t border-slate-800/80">
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="text-xs font-mono px-2.5 py-1 rounded-md bg-graphite-950 text-slate-300 border border-slate-800/90 group-hover:border-slate-700 transition-colors"
-                      >
-                        {tech}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </MotionReveal>
-          ))}
+export const ProjectsSection: React.FC = () => <section id="projects" className="section-shell">
+  <div className="max-w-7xl mx-auto px-5 sm:px-8">
+    <SectionHeader title="Системы в работе" description="Практические решения на стыке инфраструктуры, наблюдаемости и внутренних продуктов." badge="Избранные проекты" />
+    <div className="grid lg:grid-cols-2 gap-4">
+      {projectsData.map((project,idx)=><motion.article key={project.id} initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:.55,delay:(idx%2)*.08}} className="glass-panel motion-card rounded-[1.8rem] p-6 sm:p-8 flex flex-col min-h-[29rem]">
+        <div className="flex items-start justify-between gap-4">
+          <div className="glass-inset rounded-2xl p-3.5 text-[var(--accent)]">{icons[project.category] || <Layers size={19}/>}</div>
+          {project.statusLabel && <span className="rounded-full px-3 py-1.5 bg-[var(--accent-wash)] text-[var(--accent)] text-[9px] tracking-wider uppercase">{project.statusLabel}</span>}
         </div>
-      </div>
-    </section>
-  );
-};
+        <p className="mt-7 eyebrow !text-[9px]">{project.category}</p>
+        <h3 className="mt-3 text-2xl sm:text-[1.7rem] font-semibold tracking-tight leading-tight">{project.title}</h3>
+        <p className="mt-4 text-sm text-[var(--muted)] leading-relaxed">{project.description}</p>
+        <div className="mt-6 grid sm:grid-cols-2 gap-2">
+          {project.architectureHighlights.map((h,i)=><div key={i} className="glass-inset rounded-xl p-3 flex items-start gap-2 text-[11px] leading-relaxed text-[var(--ink-2)]"><Check size={13} className="mt-0.5 shrink-0 text-[var(--accent)]"/>{h}</div>)}
+        </div>
+        <div className="mt-auto pt-6 flex flex-wrap gap-2">{project.technologies.map(tech=><span key={tech} className="rounded-full border border-[var(--stroke)] px-3 py-1.5 text-[10px] text-[var(--muted)]">{tech}</span>)}</div>
+        <span className="absolute sr-only"><ArrowUpRight/></span>
+      </motion.article>)}
+    </div>
+  </div>
+</section>;

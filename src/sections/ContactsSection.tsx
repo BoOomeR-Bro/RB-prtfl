@@ -1,210 +1,32 @@
 import React from 'react';
-import {
-  Mail,
-  Phone,
-  MapPin,
-  Plane,
-  Download,
-  ExternalLink,
-  MessageSquare,
-} from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Mail, Phone, MapPin, Plane, Download, ArrowUpRight, MessageCircle } from 'lucide-react';
 import { profileData } from '../data/profile';
 import { SectionHeader } from '../components/SectionHeader';
 import { CopyButton } from '../components/CopyButton';
-import { MotionReveal } from '../components/MotionReveal';
 
 export const ContactsSection: React.FC = () => {
-  const availableSocials = profileData.socials.filter((s) => s.isAvailable && s.url);
-
-  return (
-    <section id="contacts" className="py-24 bg-graphite-900/60 relative border-t border-slate-900">
-      {/* Background ambient light */}
-      <div className="absolute inset-0 tech-dot-grid opacity-20 pointer-events-none" />
-      <div className="absolute bottom-0 right-1/4 w-[500px] h-[250px] bg-terminal-green/5 rounded-full blur-[120px] pointer-events-none" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <MotionReveal direction="up" distance={30}>
-          <SectionHeader
-            badge="// 06. CONTACTS"
-            title="Есть инфраструктурная задача? Давайте обсудим"
-            description="Открыт к интересным инженерным задачам, развитию инфраструктуры, автоматизации и созданию внутренних сервисов."
-          />
-        </MotionReveal>
-
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          {/* Main Direct Contacts: 8 cols (Relic floats up from bottom-left) */}
-          <div className="lg:col-span-8">
-            <MotionReveal direction="up" distance={50} delay={0.1} scale className="h-full">
-              <div className="h-full p-6 sm:p-8 rounded-2xl bg-graphite-900/90 border border-slate-800 shadow-2xl flex flex-col justify-between hover:border-slate-700 transition-colors">
-                <div>
-                  <div className="text-xs font-mono text-slate-400 uppercase tracking-wider mb-6">
-                    Прямые каналы связи:
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-8">
-                    {/* Email Card */}
-                    <div className="p-5 rounded-xl bg-graphite-950/80 border border-slate-800 hover:border-slate-700 transition-all duration-200 flex flex-col justify-between shadow-md hover:shadow-glow-green hover:-translate-y-1">
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="w-9 h-9 rounded-lg bg-emerald-950/80 border border-terminal-green/30 flex items-center justify-center text-terminal-green">
-                            <Mail className="w-4 h-4" />
-                          </div>
-                          <CopyButton
-                            textToCopy={profileData.contacts.email}
-                            itemKey="email"
-                            label="Скопировать email"
-                          />
-                        </div>
-                        <div className="text-xs font-mono text-slate-400 mb-1">
-                          Электронная почта
-                        </div>
-                        <a
-                          href={`mailto:${profileData.contacts.email}`}
-                          className="text-base sm:text-lg font-mono font-bold text-white hover:text-terminal-accent transition-colors break-all"
-                        >
-                          {profileData.contacts.email}
-                        </a>
-                      </div>
-
-                      <div className="mt-4 pt-3 border-t border-slate-850">
-                        <a
-                          href={`mailto:${profileData.contacts.email}`}
-                          className="inline-flex items-center gap-1.5 text-xs font-mono text-terminal-green hover:underline"
-                        >
-                          <span>Написать письмо</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-                    </div>
-
-                    {/* Phone Card */}
-                    <div className="p-5 rounded-xl bg-graphite-950/80 border border-slate-800 hover:border-slate-700 transition-all duration-200 flex flex-col justify-between shadow-md hover:shadow-glow-cyan hover:-translate-y-1">
-                      <div>
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="w-9 h-9 rounded-lg bg-sky-950/80 border border-terminal-cyan/30 flex items-center justify-center text-terminal-cyan">
-                            <Phone className="w-4 h-4" />
-                          </div>
-                          <CopyButton
-                            textToCopy={profileData.contacts.phone}
-                            itemKey="phone"
-                            label="Скопировать номер"
-                          />
-                        </div>
-                        <div className="text-xs font-mono text-slate-400 mb-1">
-                          Мобильный телефон
-                        </div>
-                        <a
-                          href={`tel:${profileData.contacts.phone}`}
-                          className="text-base sm:text-lg font-mono font-bold text-white hover:text-terminal-cyan transition-colors"
-                        >
-                          {profileData.contacts.phoneFormatted}
-                        </a>
-                      </div>
-
-                      <div className="mt-4 pt-3 border-t border-slate-850">
-                        <a
-                          href={`tel:${profileData.contacts.phone}`}
-                          className="inline-flex items-center gap-1.5 text-xs font-mono text-terminal-cyan hover:underline"
-                        >
-                          <span>Позвонить</span>
-                          <ExternalLink className="w-3 h-3" />
-                        </a>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Status and Location Grid */}
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-slate-800/80 text-sm">
-                    <div className="flex items-center gap-3 p-3.5 rounded-xl bg-graphite-950/50 border border-slate-850">
-                      <MapPin className="w-4 h-4 text-terminal-green shrink-0" />
-                      <div>
-                        <div className="text-xs font-mono text-slate-400">Локация:</div>
-                        <div className="text-white font-medium">
-                          {profileData.contacts.location}
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="flex items-center gap-3 p-3.5 rounded-xl bg-graphite-950/50 border border-slate-850">
-                      <Plane className="w-4 h-4 text-terminal-cyan shrink-0" />
-                      <div>
-                        <div className="text-xs font-mono text-slate-400">Мобильность:</div>
-                        <div className="text-white font-medium">
-                          {profileData.contacts.relocationOrTravel}
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Optional Socials: Only rendered if enabled in profileData */}
-                {availableSocials.length > 0 && (
-                  <div className="mt-6 pt-5 border-t border-slate-800 flex items-center gap-3">
-                    <span className="text-xs font-mono text-slate-400">Профили:</span>
-                    {availableSocials.map((social) => (
-                      <a
-                        key={social.id}
-                        href={social.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-graphite-950 hover:bg-graphite-850 text-slate-300 hover:text-white border border-slate-800 text-xs font-mono transition-colors"
-                      >
-                        <span>{social.label}</span>
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </MotionReveal>
+  const socials = profileData.socials.filter((s)=>s.isAvailable&&s.url);
+  return <section id="contacts" className="section-shell pb-24">
+    <div className="max-w-7xl mx-auto px-5 sm:px-8">
+      <SectionHeader title="Давайте обсудим, что можно улучшить" description="Открыт к инженерным задачам, развитию инфраструктуры, автоматизации и созданию полезных внутренних сервисов." badge="Контакт" />
+      <div className="grid lg:grid-cols-[1.25fr_.75fr] gap-4 items-stretch">
+        <motion.div initial={{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true}} className="glass-panel rounded-[1.8rem] p-6 sm:p-9">
+          <span className="eyebrow">Прямые каналы</span>
+          <div className="grid sm:grid-cols-2 gap-3 mt-6">
+            <div className="glass-inset rounded-[1.3rem] p-5"><div className="flex items-center justify-between"><span className="text-[var(--accent)]"><Mail size={18}/></span><CopyButton textToCopy={profileData.contacts.email} itemKey="email" label="Скопировать email"/></div><p className="mt-5 text-[10px] uppercase tracking-wider text-[var(--muted)]">Электронная почта</p><a href={`mailto:${profileData.contacts.email}`} className="block mt-1 text-sm sm:text-base font-medium break-all hover:text-[var(--accent)] transition-colors">{profileData.contacts.email}</a></div>
+            <div className="glass-inset rounded-[1.3rem] p-5"><div className="flex items-center justify-between"><span className="text-[var(--accent)]"><Phone size={18}/></span><CopyButton textToCopy={profileData.contacts.phone} itemKey="phone" label="Скопировать номер"/></div><p className="mt-5 text-[10px] uppercase tracking-wider text-[var(--muted)]">Телефон</p><a href={`tel:${profileData.contacts.phone}`} className="block mt-1 text-sm sm:text-base font-medium hover:text-[var(--accent)] transition-colors">{profileData.contacts.phoneFormatted}</a></div>
           </div>
-
-          {/* Quick Resume & Status Card: 4 cols (Relic floats up from bottom-right) */}
-          <div className="lg:col-span-4">
-            <MotionReveal direction="up" distance={50} delay={0.2} scale className="h-full">
-              <div className="h-full p-6 sm:p-8 rounded-2xl bg-gradient-to-b from-graphite-900 to-graphite-950 border border-slate-800 shadow-2xl flex flex-col justify-between hover:border-slate-700 transition-colors">
-                <div>
-                  <div className="w-12 h-12 rounded-xl bg-emerald-950/80 border border-terminal-green/40 flex items-center justify-center text-terminal-green mb-5">
-                    <MessageSquare className="w-6 h-6" />
-                  </div>
-
-                  <h3 className="text-lg font-bold text-white mb-2">
-                    Готов к диалогу
-                  </h3>
-
-                  <p className="text-sm text-slate-300 leading-relaxed mb-6">
-                    Вы можете связаться со мной напрямую по телефону, в мессенджерах по привязанному номеру или отправить письмо на рабочую почту.
-                  </p>
-
-                  <div className="p-4 rounded-xl bg-graphite-950 border border-slate-850 font-mono text-xs text-slate-400 space-y-2">
-                    <div className="flex items-center justify-between">
-                      <span>Статус:</span>
-                      <span className="text-terminal-green font-semibold">
-                        Рассматриваю предложения
-                      </span>
-                    </div>
-                    <div className="flex items-center justify-between">
-                      <span>Формат:</span>
-                      <span className="text-slate-200">Офис / Гибрид / Удалённо</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="mt-8 pt-6 border-t border-slate-850">
-                  <a
-                    href={profileData.resume.downloadUrl}
-                    download={profileData.resume.fileName}
-                    className="w-full inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-terminal-green text-slate-950 font-mono font-semibold text-sm hover:bg-terminal-accent transition-all duration-200 shadow-glow-green hover:-translate-y-0.5 active:translate-y-0"
-                  >
-                    <Download className="w-4 h-4" />
-                    <span>{profileData.resume.label}</span>
-                  </a>
-                </div>
-              </div>
-            </MotionReveal>
-          </div>
-        </div>
+          <div className="grid sm:grid-cols-2 gap-3 mt-3"><div className="glass-inset rounded-xl px-4 py-3 flex items-center gap-3"><MapPin size={15} className="text-[var(--accent)]"/><div><span className="block text-[9px] uppercase tracking-wider text-[var(--muted)]">Локация</span><span className="text-xs">{profileData.contacts.location}</span></div></div><div className="glass-inset rounded-xl px-4 py-3 flex items-center gap-3"><Plane size={15} className="text-[var(--accent)]"/><div><span className="block text-[9px] uppercase tracking-wider text-[var(--muted)]">Мобильность</span><span className="text-xs">{profileData.contacts.relocationOrTravel}</span></div></div></div>
+          {!!socials.length&&<div className="flex gap-2 mt-5">{socials.map(s=><a key={s.id} href={s.url} target="_blank" rel="noreferrer" className="glass-inset rounded-full px-3 py-2 text-xs">{s.label}<ArrowUpRight size={12} className="inline ml-1"/></a>)}</div>}
+        </motion.div>
+        <motion.aside initial={{opacity:0,y:22}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{delay:.1}} className="glass-panel rounded-[1.8rem] p-6 sm:p-8 flex flex-col justify-between overflow-hidden relative">
+          <div className="hero-orb w-56 h-56 -right-16 -top-20 bg-[var(--glow-a)] blur-3xl" />
+          <div className="relative"><span className="glass-inset rounded-2xl p-3 inline-grid text-[var(--accent)]"><MessageCircle size={20}/></span><h3 className="mt-6 text-2xl font-semibold tracking-tight">Есть задача?</h3><p className="mt-3 text-sm text-[var(--muted)] leading-relaxed">Напишите или позвоните — обсудим контекст и найдём рабочее решение.</p><div className="glass-inset rounded-2xl p-4 mt-6 text-xs"><div className="flex justify-between gap-3"><span className="text-[var(--muted)]">Статус</span><span className="inline-flex items-center gap-2"><span className="status-dot !w-1.5 !h-1.5"/>Открыт к предложениям</span></div><div className="flex justify-between gap-3 mt-3"><span className="text-[var(--muted)]">Формат</span><span>Офис · гибрид · удалённо</span></div></div></div>
+          <a href={profileData.resume.downloadUrl} download={profileData.resume.fileName} className="glass-action relative mt-8 justify-center">{profileData.resume.label}<Download size={15}/></a>
+        </motion.aside>
       </div>
-    </section>
-  );
+      <div className="mt-5 flex items-center justify-between text-[10px] text-[var(--muted)]"><span>Обычно отвечаю в течение рабочего дня</span><span className="hidden sm:block">{profileData.fullNameEn} · {new Date().getFullYear()}</span></div>
+    </div>
+  </section>;
 };
