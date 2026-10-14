@@ -7,22 +7,22 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: {
+        base: {
+          50: '#F9F9F9',
+          100: '#F1F1F1',
+          200: '#E2E2E2',
+          300: '#D1D1D1',
+          400: '#A3A3A3',
+          500: '#737373',
+          600: '#525252',
+          700: '#404040',
+          800: '#262626',
+          900: '#171717',
           950: '#0A0A0A',
-          900: '#141414',
-          850: '#1A1A1A',
-          800: '#1F1F1F',
-          700: '#2A2A2A',
-          600: '#333333',
-          500: '#555555',
-          400: '#888888',
-          300: '#AAAAAA',
-          200: '#CCCCCC',
         },
-        lime: {
-          DEFAULT: '#C8FF00',
-          dim: 'rgba(200, 255, 0, 0.08)',
-          subtle: 'rgba(200, 255, 0, 0.15)',
+        accent: {
+          cobalt: '#2D5BFF',
+          silver: '#C0C0C0',
         },
       },
       fontFamily: {
@@ -30,16 +30,20 @@ export default {
           'Inter',
           '-apple-system',
           'BlinkMacSystemFont',
-          '"Segoe UI"',
-          'Roboto',
+          'sans-serif',
+        ],
+        display: [
+          'Inter',
           'sans-serif',
         ],
         mono: [
           '"JetBrains Mono"',
-          'ui-monospace',
-          'SFMono-Regular',
           'monospace',
         ],
+      },
+      letterSpacing: {
+        tightest: '-0.04em',
+        tighter: '-0.02em',
       },
     },
   },

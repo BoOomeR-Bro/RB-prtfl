@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { motion } from 'framer-motion';
 import {
   Terminal,
   Boxes,
@@ -7,11 +8,9 @@ import {
   Cpu,
   Code2,
   ShieldCheck,
-  Check,
 } from 'lucide-react';
 import { competencyCategories } from '../data/competencies';
 import { SectionHeader } from '../components/SectionHeader';
-import { MotionReveal } from '../components/MotionReveal';
 
 const categoryIcons: Record<string, React.ReactNode> = {
   Terminal: <Terminal className="w-5 h-5 text-terminal-green" />,
@@ -24,105 +23,44 @@ const categoryIcons: Record<string, React.ReactNode> = {
 };
 
 export const CompetenciesSection: React.FC = () => {
-  const [activeFilter, setActiveFilter] = useState<string>('all');
-
-  const filteredCategories =
-    activeFilter === 'all'
-      ? competencyCategories
-      : competencyCategories.filter((c) => c.id === activeFilter);
-
   return (
-    <section id="competencies" className="py-20 bg-graphite-900/40 relative border-t border-slate-900">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <MotionReveal direction="up" distance={30}>
-          <SectionHeader
-            badge="// 02. COMPETENCIES"
-            title="Технические компетенции"
-            description="Реальные технологии и инструменты, с которыми работал в корпоративной инфраструктуре, сетях, виртуализации и разработке сервисов."
-          />
-        </MotionReveal>
+    <section id="competencies" className="py-32 bg-base-950 relative border-t border-base-900">
+      <div className="max-w-7xl mx-auto px-6">
+        <SectionHeader
+          title="Technical Infrastructure"
+          description="A specialized stack for high-availability environments, cloud-native deployments, and industrial-grade automation."
+        />
 
-        {/* Filter buttons (revealed smoothly) */}
-        <MotionReveal direction="up" distance={25} delay={0.1}>
-          <div className="flex flex-wrap gap-2 mb-10 pb-2 border-b border-slate-800/80">
-            <button
-              type="button"
-              onClick={() => setActiveFilter('all')}
-              className={`px-3.5 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 border ${
-                activeFilter === 'all'
-                  ? 'bg-terminal-green text-slate-950 font-semibold border-terminal-green shadow-sm'
-                  : 'bg-graphite-900 text-slate-400 hover:text-white border-slate-800 hover:border-slate-700'
-              }`}
-            >
-              Все категории ({competencyCategories.length})
-            </button>
-            {competencyCategories.map((cat) => (
-              <button
-                key={cat.id}
-                type="button"
-                onClick={() => setActiveFilter(cat.id)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-mono transition-all duration-200 border ${
-                  activeFilter === cat.id
-                    ? 'bg-terminal-green text-slate-950 font-semibold border-terminal-green shadow-sm'
-                    : 'bg-graphite-900 text-slate-400 hover:text-white border-slate-800 hover:border-slate-700'
-                }`}
-              >
-                {cat.title}
-              </button>
-            ))}
-          </div>
-        </MotionReveal>
-
-        {/* Categories Grid (Relic cards floating up from bottom) */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredCategories.map((category, idx) => (
-            <MotionReveal
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-px bg-base-900 border border-base-900">
+          {competencyCategories.map((category, idx) => (
+            <motion.div
               key={category.id}
-              direction="up"
-              distance={40}
-              delay={0.08 * (idx % 3)}
-              scale
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: idx * 0.05 }}
+              className="bg-base-950 p-10 hover:bg-white/[0.01] transition-colors group"
             >
-              <div className="h-full p-6 rounded-2xl bg-graphite-900/90 border border-slate-800 hover:border-slate-700 hover:bg-graphite-850/80 transition-all duration-300 flex flex-col justify-between group shadow-lg hover:shadow-glow-green hover:-translate-y-1.5">
-                <div>
-                  {/* Category Header */}
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-graphite-950 border border-slate-800 flex items-center justify-center shrink-0 group-hover:border-slate-700 transition-colors">
-                      {categoryIcons[category.iconName] || (
-                        <Terminal className="w-5 h-5 text-terminal-green" />
-                      )}
-                    </div>
-                    <div>
-                      <h3 className="text-base font-bold text-white font-mono">
-                        {category.title}
-                      </h3>
-                      <p className="text-xs text-slate-400 mt-0.5">
-                        {category.shortDesc}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Skills Badges */}
-                  <div className="flex flex-wrap gap-2 mt-4">
-                    {category.skills.map((skill) => (
-                      <span
-                        key={skill}
-                        className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md bg-graphite-950/80 hover:bg-graphite-950 text-slate-300 text-xs font-mono border border-slate-800/80 hover:border-slate-700 transition-colors"
-                      >
-                        <Check className="w-3 h-3 text-terminal-green/80" />
-                        <span>{skill}</span>
-                      </span>
-                    ))}
-                  </div>
+              <div className="flex items-center space-x-4 mb-10">
+                <div className="text-base-600 group-hover:text-accent-cobalt transition-colors">
+                  {categoryIcons[category.iconName] || <Terminal className="w-6 h-6" />}
                 </div>
-
-                {/* Bottom technical footer */}
-                <div className="mt-6 pt-3 border-t border-slate-800/60 flex items-center justify-between text-[11px] font-mono text-slate-400">
-                  <span>{category.skills.length} подтверждённых навыков</span>
-                  <span className="text-terminal-green">OK</span>
-                </div>
+                <h3 className="text-sm font-black uppercase tracking-widest text-white">
+                  {category.title}
+                </h3>
               </div>
-            </MotionReveal>
+
+              <ul className="space-y-4">
+                {category.skills.map((skill) => (
+                  <li key={skill} className="flex items-baseline space-x-3 group/item">
+                    <span className="text-[10px] font-mono text-base-700 group-hover/item:text-accent-cobalt">→</span>
+                    <span className="text-sm font-medium text-base-400 group-hover/item:text-base-200 transition-colors">
+                      {skill}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </motion.div>
           ))}
         </div>
       </div>
