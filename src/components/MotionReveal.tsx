@@ -3,26 +3,24 @@ import { motion, useReducedMotion } from 'framer-motion';
 
 interface MotionRevealProps {
   children: React.ReactNode;
-  direction?: 'up' | 'down' | 'left' | 'right' | 'none';
   delay?: number;
-  duration?: number;
-  distance?: number;
   className?: string;
-  viewportMargin?: string;
-  once?: boolean;
+  /** @deprecated Kept for backward compat, only opacity+y used now */
+  direction?: string;
+  /** @deprecated Kept for backward compat */
+  distance?: number;
+  /** @deprecated Kept for backward compat */
   scale?: boolean;
+  once?: boolean;
+  viewportMargin?: string;
 }
 
 export const MotionReveal: React.FC<MotionRevealProps> = ({
   children,
-  direction = 'up',
   delay = 0,
-  duration = 0.65,
-  distance = 35,
   className = '',
-  viewportMargin = '-60px',
   once = true,
-  scale = false,
+  viewportMargin = '-40px',
 }) => {
   const shouldReduceMotion = useReducedMotion();
 
@@ -30,43 +28,15 @@ export const MotionReveal: React.FC<MotionRevealProps> = ({
     return <div className={className}>{children}</div>;
   }
 
-  const getInitialPosition = () => {
-    switch (direction) {
-      case 'up':
-        return { y: distance, x: 0 };
-      case 'down':
-        return { y: -distance, x: 0 };
-      case 'left':
-        return { x: distance, y: 0 };
-      case 'right':
-        return { x: -distance, y: 0 };
-      default:
-        return { x: 0, y: 0 };
-    }
-  };
-
-  const initial = {
-    opacity: 0,
-    ...getInitialPosition(),
-    ...(scale ? { scale: 0.96 } : {}),
-  };
-
-  const animate = {
-    opacity: 1,
-    x: 0,
-    y: 0,
-    ...(scale ? { scale: 1 } : {}),
-  };
-
   return (
     <motion.div
-      initial={initial}
-      whileInView={animate}
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once, margin: viewportMargin }}
       transition={{
-        duration,
+        duration: 0.5,
         delay,
-        ease: [0.21, 0.47, 0.32, 0.98], // Custom smooth ease-out curve
+        ease: [0.25, 0.46, 0.45, 0.94],
       }}
       className={className}
     >

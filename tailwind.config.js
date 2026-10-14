@@ -4,25 +4,25 @@ export default {
     "./index.html",
     "./src/**/*.{js,ts,jsx,tsx}",
   ],
-  darkMode: 'class',
   theme: {
     extend: {
       colors: {
-        graphite: {
-          950: '#06080c',
-          900: '#0a0d14',
-          850: '#0f1420',
-          800: '#151c2c',
-          700: '#1e283d',
-          600: '#2d3b55',
-          500: '#475569',
+        ink: {
+          950: '#0A0A0A',
+          900: '#141414',
+          850: '#1A1A1A',
+          800: '#1F1F1F',
+          700: '#2A2A2A',
+          600: '#333333',
+          500: '#555555',
+          400: '#888888',
+          300: '#AAAAAA',
+          200: '#CCCCCC',
         },
-        terminal: {
-          green: '#10b981',
-          lime: '#22c55e',
-          accent: '#00f59b',
-          cyan: '#38bdf8',
-          blue: '#60a5fa',
+        lime: {
+          DEFAULT: '#C8FF00',
+          dim: 'rgba(200, 255, 0, 0.08)',
+          subtle: 'rgba(200, 255, 0, 0.15)',
         },
       },
       fontFamily: {
@@ -32,27 +32,14 @@ export default {
           'BlinkMacSystemFont',
           '"Segoe UI"',
           'Roboto',
-          'Helvetica',
-          'Arial',
           'sans-serif',
         ],
         mono: [
           '"JetBrains Mono"',
-          '"Fira Code"',
           'ui-monospace',
           'SFMono-Regular',
-          'Menlo',
-          'Monaco',
-          'Consolas',
           'monospace',
         ],
-      },
-      backgroundImage: {
-        'grid-pattern': "radial-gradient(circle, rgba(255, 255, 255, 0.05) 1px, transparent 1px)",
-      },
-      boxShadow: {
-        'glow-green': '0 0 24px -4px rgba(16, 185, 129, 0.25)',
-        'glow-cyan': '0 0 24px -4px rgba(56, 189, 248, 0.25)',
       },
     },
   },

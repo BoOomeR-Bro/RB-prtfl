@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Download, Menu, X, Terminal } from 'lucide-react';
+import { Download, Menu, X } from 'lucide-react';
 import { navigationItems } from '../data/navigation';
 import { profileData } from '../data/profile';
 import { useScrollSpy } from '../hooks/useScrollSpy';
@@ -13,89 +13,68 @@ export const Navbar: React.FC = () => {
   const activeSection = useScrollSpy(sectionIds);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 20);
-    };
+    const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
-
   return (
     <motion.header
-      initial={{ y: -30, opacity: 0 }}
+      initial={{ y: -20, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+      transition={{ duration: 0.5, ease: [0.25, 0.46, 0.45, 0.94] }}
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-graphite-950/90 backdrop-blur-md border-b border-slate-800/80 shadow-lg'
+          ? 'bg-ink-950/80 backdrop-blur-lg border-b border-ink-800'
           : 'bg-transparent border-b border-transparent'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-16 sm:h-20">
-          {/* Logo / Brand */}
+      <div className="max-w-5xl mx-auto px-6">
+        <div className="flex items-center justify-between h-16">
+          {/* Name as logo */}
           <a
             href="#"
-            className="group flex items-center gap-2.5 font-mono text-sm sm:text-base font-bold text-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terminal-green rounded-md"
-            aria-label="Руслан Бабинов — Главная"
+            className="text-sm font-bold text-white tracking-tight hover:text-lime transition-colors"
+            aria-label="Главная"
           >
-            <div className="w-8 h-8 rounded-lg bg-graphite-900 border border-slate-800 group-hover:border-terminal-green flex items-center justify-center transition-colors">
-              <Terminal className="w-4 h-4 text-terminal-green" />
-            </div>
-            <div className="flex flex-col">
-              <span className="tracking-tight text-white group-hover:text-terminal-accent transition-colors">
-                {profileData.fullNameEn.toUpperCase()}
-              </span>
-              <span className="text-[10px] text-slate-400 font-mono font-normal">
-                INFRA_ENG // v2.4
-              </span>
-            </div>
+            {profileData.fullNameEn.toUpperCase()}
           </a>
 
-          {/* Desktop Nav Items */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2">
-            {navigationItems.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  className={`px-3 py-1.5 rounded-md text-xs lg:text-sm font-medium transition-all duration-200 ${
-                    isActive
-                      ? 'text-terminal-green bg-terminal-green/10 font-semibold shadow-sm'
-                      : 'text-slate-300 hover:text-white hover:bg-graphite-850'
-                  }`}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
+          {/* Desktop Nav */}
+          <nav className="hidden md:flex items-center gap-8">
+            {navigationItems.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className={`text-sm transition-colors duration-200 ${
+                  activeSection === item.id
+                    ? 'text-lime font-medium'
+                    : 'text-ink-400 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
           </nav>
 
-          {/* Action: Download Resume Button & Mobile Menu Toggle */}
+          {/* Actions */}
           <div className="flex items-center gap-3">
             <a
               href={profileData.resume.downloadUrl}
               download={profileData.resume.fileName}
-              className="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-terminal-green/10 hover:bg-terminal-green/20 text-terminal-green border border-terminal-green/40 hover:border-terminal-green text-xs sm:text-sm font-mono font-medium transition-all duration-200 shadow-sm hover:shadow-glow-green hover:-translate-y-0.5 active:translate-y-0"
-              aria-label="Скачать резюме в формате PDF"
+              className="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-ink-950 bg-lime hover:bg-lime/90 transition-colors"
+              aria-label="Скачать резюме"
             >
-              <Download className="w-4 h-4" />
-              <span className="hidden sm:inline">Скачать резюме</span>
-              <span className="sm:hidden">CV</span>
+              <Download className="w-3.5 h-3.5" />
+              CV
             </a>
 
-            {/* Mobile menu button */}
             <button
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden inline-flex items-center justify-center p-2 rounded-lg text-slate-300 hover:text-white bg-graphite-900 border border-slate-800 hover:border-slate-700 focus:outline-none"
+              className="md:hidden p-2 text-ink-400 hover:text-white transition-colors"
               aria-expanded={mobileMenuOpen}
-              aria-label="Открыть мобильное меню"
+              aria-label="Меню"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -103,42 +82,38 @@ export const Navbar: React.FC = () => {
         </div>
       </div>
 
-      {/* Mobile Navigation Dropdown */}
+      {/* Mobile Menu */}
       {mobileMenuOpen && (
         <motion.div
-          initial={{ opacity: 0, y: -10 }}
+          initial={{ opacity: 0, y: -8 }}
           animate={{ opacity: 1, y: 0 }}
-          exit={{ opacity: 0, y: -10 }}
-          transition={{ duration: 0.2 }}
-          className="md:hidden bg-graphite-950/98 border-b border-slate-800 px-4 pt-3 pb-6 shadow-2xl backdrop-blur-xl"
+          transition={{ duration: 0.15 }}
+          className="md:hidden bg-ink-950 border-b border-ink-800 px-6 pb-6"
         >
-          <nav className="flex flex-col space-y-1">
-            {navigationItems.map((item) => {
-              const isActive = activeSection === item.id;
-              return (
-                <a
-                  key={item.id}
-                  href={item.href}
-                  onClick={closeMobileMenu}
-                  className={`px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                    isActive
-                      ? 'text-terminal-green bg-terminal-green/10 font-semibold'
-                      : 'text-slate-300 hover:text-white hover:bg-graphite-900'
-                  }`}
-                >
-                  {item.label}
-                </a>
-              );
-            })}
-            <div className="pt-3 mt-2 border-t border-slate-800">
+          <nav className="flex flex-col gap-1 pt-2">
+            {navigationItems.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                onClick={() => setMobileMenuOpen(false)}
+                className={`py-2.5 text-sm transition-colors ${
+                  activeSection === item.id
+                    ? 'text-lime font-medium'
+                    : 'text-ink-400 hover:text-white'
+                }`}
+              >
+                {item.label}
+              </a>
+            ))}
+            <div className="pt-3 mt-2 border-t border-ink-800">
               <a
                 href={profileData.resume.downloadUrl}
                 download={profileData.resume.fileName}
-                onClick={closeMobileMenu}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-terminal-green text-slate-950 font-mono font-semibold text-sm hover:bg-terminal-accent transition-colors"
+                onClick={() => setMobileMenuOpen(false)}
+                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg bg-lime text-ink-950 text-sm font-semibold"
               >
                 <Download className="w-4 h-4" />
-                Скачать резюме (PDF)
+                Скачать резюме
               </a>
             </div>
           </nav>

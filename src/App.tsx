@@ -11,11 +11,8 @@ import { Footer } from './components/Footer';
 
 export const App: React.FC = () => {
   return (
-    <div className="min-h-screen bg-graphite-950 text-slate-100 flex flex-col selection:bg-terminal-green/20 selection:text-terminal-accent">
-      {/* Top Fixed Navigation */}
+    <div className="min-h-screen bg-ink-950 text-white flex flex-col">
       <Navbar />
-
-      {/* Main Sections Content */}
       <main className="flex-1">
         <HeroSection />
         <AboutSection />
@@ -25,8 +22,6 @@ export const App: React.FC = () => {
         <EducationSection />
         <ContactsSection />
       </main>
-
-      {/* Global Footer */}
       <Footer />
     </div>
   );

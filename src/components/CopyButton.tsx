@@ -23,21 +23,21 @@ export const CopyButton: React.FC<CopyButtonProps> = ({
       type="button"
       onClick={() => copy(textToCopy, itemKey)}
       aria-label={`${label}: ${textToCopy}`}
-      title={isCopied ? 'Скопировано в буфер!' : label}
-      className={`inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-md text-xs font-mono transition-all duration-200 border ${
+      title={isCopied ? 'Скопировано!' : label}
+      className={`inline-flex items-center gap-1.5 px-2 py-1 rounded text-xs font-mono transition-colors border ${
         isCopied
-          ? 'bg-terminal-green/10 text-terminal-green border-terminal-green/40'
-          : 'bg-graphite-850 hover:bg-graphite-800 text-slate-300 hover:text-white border-slate-800 hover:border-slate-700'
+          ? 'bg-lime/10 text-lime border-lime/20'
+          : 'bg-ink-900 text-ink-400 hover:text-white border-ink-800 hover:border-ink-700'
       } ${className}`}
     >
       {isCopied ? (
         <>
-          <Check className="w-3.5 h-3.5 text-terminal-green" />
+          <Check className="w-3 h-3" />
           <span>Скопировано</span>
         </>
       ) : (
         <>
-          <Copy className="w-3.5 h-3.5 text-slate-400" />
+          <Copy className="w-3 h-3" />
           <span>Копировать</span>
         </>
       )}
