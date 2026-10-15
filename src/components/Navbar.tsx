@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { navigationItems } from '../data/navigation';
 import { profileData } from '../data/profile';
@@ -7,8 +7,29 @@ import { useScrollSpy } from '../hooks/useScrollSpy';
 interface NavbarProps { themeToggle: React.ReactNode }
 
 export const Navbar: React.FC<NavbarProps> = ({ themeToggle }) => {
+  const [atPageBottom, setAtPageBottom] = useState(false);
+  const frame = useRef(0);
   const sectionIds = navigationItems.map((item) => item.id);
   const activeSection = useScrollSpy(sectionIds);
+
+  useEffect(() => {
+    const checkBottom = () => {
+      frame.current = 0;
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 8;
+      setAtPageBottom((previous) => previous === atBottom ? previous : atBottom);
+    };
+    const scheduleCheck = () => {
+      if (!frame.current) frame.current = window.requestAnimationFrame(checkBottom);
+    };
+    checkBottom();
+    window.addEventListener('scroll', scheduleCheck, { passive: true });
+    window.addEventListener('resize', scheduleCheck);
+    return () => {
+      window.removeEventListener('scroll', scheduleCheck);
+      window.removeEventListener('resize', scheduleCheck);
+      if (frame.current) window.cancelAnimationFrame(frame.current);
+    };
+  }, []);
 
   return (
     <>
@@ -28,8 +49,10 @@ export const Navbar: React.FC<NavbarProps> = ({ themeToggle }) => {
     </motion.header>
     <motion.div
       initial={{ y: 90, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ type: 'spring', stiffness: 100, damping: 20, delay: .2 }}
+      animate={{ y: atPageBottom ? 100 : 0, opacity: atPageBottom ? 0 : 1 }}
+      transition={{ type: 'spring', stiffness: 130, damping: 22, delay: atPageBottom ? 0 : .2 }}
+      style={{ pointerEvents: atPageBottom ? 'none' : 'auto' }}
+      aria-hidden={atPageBottom}
       className="bottom-dock-wrap"
     >
       <div className="bottom-dock glass-panel">
