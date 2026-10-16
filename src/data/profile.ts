@@ -122,17 +122,17 @@ export const profileData: ProfileData = {
     email: 'ruslanclick@gmail.com',
     phone: '+7 920 618 7010',
     phoneFormatted: '+7 (920) 618-70-10',
-    location: 'Москва, Россия',
-    relocationOrTravel: 'Готов к командировкам',
+    location: 'Москва · Калуга, Россия\nБухара · Ташкент, Узбекистан',
+    relocationOrTravel: 'Готов к командировкам, переезду и вахтам',
   },
   // Единое место конфигурации соцсетей и внешних профилей
   socials: [
     {
       id: 'telegram',
       label: 'Telegram',
-      url: '', // Добавьте ссылку при необходимости, например: https://t.me/username
+      url: 'https://t.me/babynoff',
       iconName: 'Send',
-      isAvailable: false,
+      isAvailable: true,
     },
     {
       id: 'github',
