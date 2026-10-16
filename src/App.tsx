@@ -32,11 +32,11 @@ export const App: React.FC = () => {
         <Navbar themeToggle={<ThemeToggle theme={theme} onToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />} />
         <main className="flex-1">
           <HeroSection />
-          <AboutSection />
-          <CompetenciesSection />
           <ExperienceSection />
+          <CompetenciesSection />
           <ProjectsSection />
           <EducationSection />
+          <AboutSection />
           <ContactsSection />
         </main>
         <Footer />

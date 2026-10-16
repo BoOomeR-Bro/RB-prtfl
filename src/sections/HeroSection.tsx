@@ -11,9 +11,9 @@ export const HeroSection: React.FC = () => (
     <div className="hero-orb soft-pulse w-[22rem] h-[22rem] bottom-[7%] left-[15%] bg-[var(--glow-b)] blur-[90px]" />
     <div className="relative z-10 max-w-7xl mx-auto px-5 sm:px-8 w-full grid lg:grid-cols-[1.1fr_.9fr] gap-14 xl:gap-24 items-center">
       <div>
-        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="inline-flex items-center gap-3 glass-inset rounded-full px-4 py-2 mb-8">
-          <span className="status-dot" />
-          <span className="text-[10px] sm:text-[11px] tracking-[.14em] uppercase text-[var(--ink-2)]">{profileData.roleBadge}</span>
+        <motion.div initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .7 }} className="inline-flex items-center gap-4 glass-inset rounded-full px-5 py-3 mb-8">
+          <span className="status-dot role-status-pulse" />
+          <span className="hero-role-label">{profileData.roleBadge}</span>
         </motion.div>
         <motion.h1 initial={{ opacity: 0, y: 26 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: .85, delay: .08, ease: [.22, 1, .36, 1] }} className="display-title text-[clamp(3.5rem,8vw,7.8rem)] mb-7">
           <span className="hero-word">Строю.</span><span className="hero-word">Связываю.</span><span className="hero-word">Упрощаю.</span>

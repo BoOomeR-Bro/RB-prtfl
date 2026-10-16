@@ -139,9 +139,11 @@ export function AmbientGlareBackground() {
     gl.disable(gl.DEPTH_TEST);
 
     let raf = 0;
+    let lastDrawAt = 0;
     let startedAt = performance.now();
     let visible = !document.hidden;
     let progressOffset = 0;
+    const frameInterval = 1000 / 30;
     const duration = 14;
     const colors = {
       blue: [0.56, 0.82, 0.67, 0.62],
@@ -163,7 +165,11 @@ export function AmbientGlareBackground() {
     const frame = (now: number) => {
       raf = 0;
       if (!visible) return;
-      resize();
+      if (now - lastDrawAt < frameInterval) {
+        raf = window.requestAnimationFrame(frame);
+        return;
+      }
+      lastDrawAt = now;
       const progress = ((now - startedAt) / (duration * 1000) + progressOffset) % 1;
       gl.clearColor(0, 0, 0, 0);
       gl.clear(gl.COLOR_BUFFER_BIT);

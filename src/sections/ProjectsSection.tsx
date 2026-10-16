@@ -13,7 +13,7 @@ const icons: Record<string, React.ReactNode> = {
 
 export const ProjectsSection: React.FC = () => <section id="projects" className="section-shell">
   <div className="max-w-7xl mx-auto px-5 sm:px-8">
-    <SectionHeader title="Системы в работе" description="Практические решения на стыке инфраструктуры, наблюдаемости и внутренних продуктов." badge="Избранные проекты" />
+    <SectionHeader title="Системы в работе" description="Практические решения на стыке инфраструктуры, наблюдаемости и внутренних продуктов." badge="Рабочие кейсы" />
     <div className="grid lg:grid-cols-2 gap-4">
       {projectsData.map((project,idx)=><motion.article key={project.id} initial={{opacity:0,y:24}} whileInView={{opacity:1,y:0}} viewport={{once:true}} transition={{duration:.55,delay:(idx%2)*.08}} className="glass-panel motion-card rounded-[1.8rem] p-6 sm:p-8 flex flex-col min-h-[29rem]">
         <div className="flex items-start justify-between gap-4">

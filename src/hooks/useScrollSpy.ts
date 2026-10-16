@@ -4,7 +4,9 @@ export function useScrollSpy(sectionIds: string[], offset = 120): string {
   const [activeId, setActiveId] = useState<string>('');
 
   useEffect(() => {
-    const handleScroll = () => {
+    let frame = 0;
+    const updateActiveSection = () => {
+      frame = 0;
       const scrollPosition = window.scrollY + offset;
 
       for (let i = sectionIds.length - 1; i >= 0; i--) {
@@ -23,12 +25,16 @@ export function useScrollSpy(sectionIds: string[], offset = 120): string {
         setActiveId('');
       }
     };
+    const handleScroll = () => {
+      if (!frame) frame = window.requestAnimationFrame(updateActiveSection);
+    };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      if (frame) window.cancelAnimationFrame(frame);
     };
   }, [sectionIds, offset]);
 

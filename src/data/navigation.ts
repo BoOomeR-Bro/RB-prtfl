@@ -5,10 +5,10 @@ export interface NavItem {
 }
 
 export const navigationItems: NavItem[] = [
-  { id: 'about', label: 'Обо мне', href: '#about' },
+  { id: 'experience', label: 'Опыт работы', href: '#experience' },
   { id: 'competencies', label: 'Компетенции', href: '#competencies' },
-  { id: 'experience', label: 'Опыт', href: '#experience' },
-  { id: 'projects', label: 'Проекты', href: '#projects' },
+  { id: 'projects', label: 'Рабочие кейсы', href: '#projects' },
   { id: 'education', label: 'Образование', href: '#education' },
+  { id: 'about', label: 'Подход', href: '#about' },
   { id: 'contacts', label: 'Контакты', href: '#contacts' },
 ];
