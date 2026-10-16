@@ -9,6 +9,7 @@ import { EducationSection } from './sections/EducationSection';
 import { ContactsSection } from './sections/ContactsSection';
 import { Footer } from './components/Footer';
 import { ThemeToggle, type Theme } from './components/ThemeToggle';
+import { AmbientGlareBackground } from './components/AmbientGlareBackground';
 
 const getInitialTheme = (): Theme => {
   const saved = window.localStorage.getItem('portfolio-theme');
@@ -26,17 +27,20 @@ export const App: React.FC = () => {
 
   return (
     <div className="site-shell min-h-screen flex flex-col">
-      <Navbar themeToggle={<ThemeToggle theme={theme} onToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />} />
-      <main className="flex-1">
-        <HeroSection />
-        <AboutSection />
-        <CompetenciesSection />
-        <ExperienceSection />
-        <ProjectsSection />
-        <EducationSection />
-        <ContactsSection />
-      </main>
-      <Footer />
+      <AmbientGlareBackground />
+      <div className="site-content">
+        <Navbar themeToggle={<ThemeToggle theme={theme} onToggle={() => setTheme(theme === 'dark' ? 'light' : 'dark')} />} />
+        <main className="flex-1">
+          <HeroSection />
+          <AboutSection />
+          <CompetenciesSection />
+          <ExperienceSection />
+          <ProjectsSection />
+          <EducationSection />
+          <ContactsSection />
+        </main>
+        <Footer />
+      </div>
     </div>
   );
 };

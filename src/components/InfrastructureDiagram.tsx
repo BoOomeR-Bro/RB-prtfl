@@ -1,70 +1,88 @@
 import React, { useState } from 'react';
-import { AnimatePresence, motion } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { Activity, Boxes, CloudCog, Network, ShieldCheck, Terminal, Workflow } from 'lucide-react';
 
 const nodes = [
-  { id:'linux', label:'Linux', sub:'Server estate', icon:Terminal, tech:'Debian · Astra · Ubuntu', metric:'99.98%', tint:'mint' },
-  { id:'virtual', label:'Virtualization', sub:'Compute layer', icon:Boxes, tech:'VMware · Hyper-V', metric:'5 hosts', tint:'blue' },
-  { id:'network', label:'Network', sub:'Core & edge', icon:Network, tech:'Cisco · Eltex · VPN', metric:'L2 / L3', tint:'violet' },
-  { id:'observe', label:'Observability', sub:'Signals & events', icon:Activity, tech:'Zabbix · Grafana', metric:'Live', tint:'amber' },
-  { id:'automation', label:'Automation', sub:'Tools & delivery', icon:Workflow, tech:'Docker · Bash · PowerShell', metric:'Active', tint:'rose' },
+  { id: 'linux', label: 'Linux', sub: 'Server estate', icon: Terminal, tech: 'Debian · Astra · Ubuntu', metric: '99.98%' },
+  { id: 'virtual', label: 'Virtualization', sub: 'Compute layer', icon: Boxes, tech: 'VMware · Hyper-V', metric: '5 hosts' },
+  { id: 'network', label: 'Network', sub: 'Core & edge', icon: Network, tech: 'Cisco · Eltex · VPN', metric: 'L2 / L3' },
+  { id: 'observe', label: 'Observability', sub: 'Signals & events', icon: Activity, tech: 'Zabbix · Grafana', metric: 'Live' },
+  { id: 'automation', label: 'Automation', sub: 'Tools & delivery', icon: Workflow, tech: 'Docker · Bash · PowerShell', metric: 'Active' },
 ];
 
 export const InfrastructureDiagram: React.FC = () => {
   const [selected, setSelected] = useState(nodes[0]);
+  const SelectedIcon = selected.icon;
+
   return (
-    <div className="infra-scene-wrap infra-enter">
-      <div className="infra-scene">
-        <div className="infra-scene-glow" />
-        <div className="infra-scene-topbar">
-          <div><span className="eyebrow !text-[9px]">Live system</span><p>Infrastructure overview</p></div>
-          <span className="infra-live"><i />All systems normal</span>
-        </div>
-
-        <div className="infra-stage">
-          <div className="infra-orbit infra-orbit-a" />
-          <div className="infra-orbit infra-orbit-b" />
-          <svg className="infra-links" viewBox="0 0 520 340" aria-hidden="true">
-            <defs><linearGradient id="infraLine" x1="0" y1="0" x2="1" y2="1"><stop stopColor="var(--accent)" stopOpacity=".72"/><stop offset="1" stopColor="var(--accent-2)" stopOpacity=".08"/></linearGradient></defs>
-            <path d="M260 168 104 75M260 168 416 75M260 168 105 267M260 168 415 267M260 168 260 42" stroke="url(#infraLine)" strokeWidth="1.5" strokeDasharray="5 7" fill="none" className="infra-dash"/>
-            <circle cx="260" cy="168" r="5" fill="var(--accent)" />
-          </svg>
-
-          <div className="infra-platform"><div className="infra-platform-face"/><div className="infra-platform-top"/><div className="infra-platform-light"/></div>
-
-          <button type="button" onClick={()=>setSelected(nodes[0])} className={`infra-node infra-node-linux ${selected.id==='linux'?'is-selected':''}`} aria-pressed={selected.id==='linux'}>
-            <Terminal/><span><b>Linux</b><small>Server estate</small></span><i className="infra-node-led"/>
-          </button>
-          <button type="button" onClick={()=>setSelected(nodes[1])} className={`infra-node infra-node-virtual ${selected.id==='virtual'?'is-selected':''}`} aria-pressed={selected.id==='virtual'}>
-            <Boxes/><span><b>Virtualization</b><small>Compute layer</small></span><i className="infra-node-led"/>
-          </button>
-          <button type="button" onClick={()=>setSelected(nodes[2])} className={`infra-node infra-node-network ${selected.id==='network'?'is-selected':''}`} aria-pressed={selected.id==='network'}>
-            <Network/><span><b>Network</b><small>Core & edge</small></span><i className="infra-node-led"/>
-          </button>
-          <button type="button" onClick={()=>setSelected(nodes[3])} className={`infra-node infra-node-observe ${selected.id==='observe'?'is-selected':''}`} aria-pressed={selected.id==='observe'}>
-            <Activity/><span><b>Observability</b><small>Signals & events</small></span><i className="infra-node-led"/>
-          </button>
-          <button type="button" onClick={()=>setSelected(nodes[4])} className={`infra-node infra-node-auto ${selected.id==='automation'?'is-selected':''}`} aria-pressed={selected.id==='automation'}>
-            <Workflow/><span><b>Automation</b><small>Tools & delivery</small></span><i className="infra-node-led"/>
-          </button>
-
-          <div className="infra-core">
-            <div className="infra-core-glass"><ShieldCheck/><span>CORE</span><small>CONTROL PLANE</small></div>
+    <div className="infra-ticket-wrap">
+      <article className="infra-ticket" aria-label="Live system infrastructure overview">
+        <header className="infra-ticket-header">
+          <div className="infra-ticket-brand">
+            <span className="infra-ticket-mark"><ShieldCheck size={17} /></span>
+            <div>
+              <span className="infra-ticket-kicker">Live system</span>
+              <h2>Infrastructure overview</h2>
+            </div>
           </div>
+          <span className="infra-ticket-status"><i />All systems normal</span>
+        </header>
+
+        <div className="infra-ticket-content">
+          <section className="infra-ticket-services" aria-label="Infrastructure layers">
+            <div className="infra-ticket-sectionline">
+              <span>Infrastructure layers</span>
+              <span>01 — 05</span>
+            </div>
+            <div className="infra-ticket-list">
+              {nodes.map((node, index) => {
+                const Icon = node.icon;
+                const active = selected.id === node.id;
+                return (
+                  <button
+                    type="button"
+                    key={node.id}
+                    onClick={() => setSelected(node)}
+                    className={`infra-ticket-layer${active ? ' is-active' : ''}`}
+                    aria-pressed={active}
+                  >
+                    <span className="infra-ticket-layer-number">0{index + 1}</span>
+                    <span className="infra-ticket-layer-icon"><Icon size={16} /></span>
+                    <span className="infra-ticket-layer-copy"><b>{node.label}</b><small>{node.sub}</small></span>
+                    <span className="infra-ticket-layer-led" />
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+
+          <aside className="infra-ticket-stub" aria-live="polite">
+            <span className="infra-ticket-admit">ADMIT ONE</span>
+            <motion.div
+              key={selected.id}
+              className="infra-ticket-detail"
+              initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
+              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+            >
+              <span className="infra-ticket-detail-icon"><SelectedIcon size={22} /></span>
+              <span className="infra-ticket-detail-label">{selected.sub}</span>
+              <strong>{selected.label}</strong>
+              <span className="infra-ticket-tech">{selected.tech}</span>
+              <span className="infra-ticket-metric"><i />{selected.metric}</span>
+            </motion.div>
+            <div className="infra-ticket-stub-code" aria-hidden="true">
+              <span>CORE / CONTROL PLANE</span>
+              <div className="infra-ticket-bars"><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /><i /></div>
+            </div>
+          </aside>
         </div>
 
-        <div className="infra-inspector">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div key={selected.id} className="infra-inspector-content" initial={{ opacity: 0, y: 5 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -4 }} transition={{ duration: .16 }}>
-              <div className="infra-inspector-icon"><selected.icon/></div>
-              <div className="infra-inspector-main"><span>{selected.sub}</span><strong>{selected.label}</strong></div>
-              <div className="infra-inspector-tech">{selected.tech}</div>
-              <div className="infra-inspector-metric"><i/>{selected.metric}</div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-        <div className="infra-foot"><span><CloudCog size={13}/> Resilient by design</span><span>01 — 05</span></div>
-      </div>
+        <footer className="infra-ticket-footer">
+          <span><CloudCog size={14} />Resilient by design</span>
+          <span className="infra-ticket-footer-id">RB · INFRA / 2026</span>
+        </footer>
+      </article>
     </div>
   );
 };
