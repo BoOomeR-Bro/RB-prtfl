@@ -3,6 +3,16 @@ import { motion } from 'framer-motion';
 import { navigationItems } from '../data/navigation';
 import { profileData } from '../data/profile';
 import { useScrollSpy } from '../hooks/useScrollSpy';
+import { Briefcase, Boxes, Compass, FolderKanban, GraduationCap, Mail, type LucideIcon } from 'lucide-react';
+
+const navigationIcons: Record<string, LucideIcon> = {
+  experience: Briefcase,
+  competencies: Boxes,
+  projects: FolderKanban,
+  education: GraduationCap,
+  about: Compass,
+  contacts: Mail,
+};
 
 interface NavbarProps { themeToggle: React.ReactNode }
 
@@ -57,23 +67,21 @@ export const Navbar: React.FC<NavbarProps> = ({ themeToggle }) => {
     >
       <div className="bottom-dock glass-panel">
         <nav className="bottom-dock-links" aria-label="Основная навигация">
-          {navigationItems.map((item) => (
-            <a
-              key={item.id}
-              href={item.href}
-              className={`bottom-dock-link ${
-                activeSection === item.id
-                  ? 'is-active'
-                  : ''
-              }`}
-              aria-current={activeSection === item.id ? 'location' : undefined}
-            >
-              {item.label}
-            </a>
-          ))}
+          {navigationItems.map((item) => {
+            const Icon = navigationIcons[item.id];
+            return <a
+                key={item.id}
+                href={item.href}
+                className={`bottom-dock-link ${activeSection === item.id ? 'is-active' : ''}`}
+                aria-label={item.label}
+                title={item.label}
+                aria-current={activeSection === item.id ? 'location' : undefined}
+              >
+                <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
+                <span className="sr-only">{item.label}</span>
+              </a>;
+          })}
         </nav>
-        <span className="bottom-dock-divider" />
-        {themeToggle}
       </div>
     </motion.div>
     </>
