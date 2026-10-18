@@ -3,7 +3,6 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Calendar, MapPin, ChevronDown, Sparkles } from 'lucide-react';
 import { experienceData } from '../data/experience';
 import { SectionHeader } from '../components/SectionHeader';
-import { ScrollTone } from '../components/ScrollTone';
 
 export const ExperienceSection: React.FC = () => {
   const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({ 'turing-machines': true, nestle: true });
@@ -16,7 +15,7 @@ export const ExperienceSection: React.FC = () => {
         <div className="space-y-5">
           {experienceData.map((item, idx) => {
             const open = !!expandedIds[item.id];
-            return <ScrollTone key={item.id}><motion.article initial={{ opacity:0,x:idx%2?54:-54,y:38,rotateX:15,rotateY:idx%2?-12:12,scale:.86 }} whileInView={{ opacity:1,x:0,y:0,rotateX:0,rotateY:0,scale:1 }} viewport={{ once:true,margin:'-50px',amount:.15 }} transition={{ duration:.75,delay:idx*.1,ease:[.22,1,.36,1] }} style={{transformPerspective:1000}} className="relative pl-12 sm:pl-16 scroll-depth">
+            return <motion.article key={item.id} initial={{ opacity:0,x:18 }} whileInView={{ opacity:1,x:0 }} viewport={{ once:true,margin:'-50px' }} transition={{ duration:.55,delay:idx*.05 }} className="relative pl-12 sm:pl-16">
               <span className={`absolute left-[.67rem] sm:left-[.98rem] top-7 w-3 h-3 rounded-full border-[3px] ${item.isCurrent?'bg-[var(--accent)] border-[var(--accent)] shadow-[0_0_0_6px_var(--glow-a)]':'bg-[var(--page)] border-[var(--muted)]'}`} />
               <div className="glass-panel rounded-[1.65rem] overflow-hidden">
                 <button type="button" onClick={()=>toggle(item.id)} aria-expanded={open} className="w-full text-left p-5 sm:p-7 flex items-start justify-between gap-5">
@@ -44,7 +43,7 @@ export const ExperienceSection: React.FC = () => {
                   </motion.div>}
                 </AnimatePresence>
               </div>
-            </motion.article></ScrollTone>;
+            </motion.article>;
           })}
         </div>
       </div>
