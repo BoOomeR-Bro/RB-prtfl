@@ -61,9 +61,9 @@ export const InfrastructureDiagram: React.FC = () => {
             <motion.div
               key={selected.id}
               className="infra-ticket-detail"
-              initial={{ opacity: 0, y: 8, filter: 'blur(4px)' }}
-              animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-              transition={{ duration: 0.28, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ y: 6 }}
+              animate={{ y: 0 }}
+              transition={{ duration: 0.22, ease: [0.22, 1, 0.36, 1] }}
             >
               <span className="infra-ticket-detail-icon"><SelectedIcon size={22} /></span>
               <span className="infra-ticket-detail-label">{selected.sub}</span>

@@ -1,0 +1,11 @@
+{
+  "repository": "ruslan-babinov-portfolio",
+  "generated": "2026-10-18T12:00:00+05:00",
+  "domains": [
+    { "name": "public-client", "paths": ["src/**", "index.html"], "risk": "LOW", "notes": "Public static React application; no authentication or backend." },
+    { "name": "deployment", "paths": ["public/_headers", "public/_redirects", "nginx.conf", "Dockerfile", "docker-compose.yml"], "risk": "MEDIUM", "notes": "Static hosting response headers and container serving configuration." },
+    { "name": "dependencies", "paths": ["package.json", "package-lock.json"], "risk": "MEDIUM", "notes": "npm dependencies; audit requires network access." }
+  ],
+  "entry_points": ["Cloudflare Pages public routes", "Nginx HTTP port 80", "static resume PDF"],
+  "sensitive_assets": ["build/deploy credentials (must not be bundled)", "public/files/resume.pdf (intentionally public)"]
+}

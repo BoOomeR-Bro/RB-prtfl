@@ -1,0 +1,9 @@
+{
+  "generated": "2026-10-18T11:50:00+05:00",
+  "verdicts": [
+    { "id": "SEC-001", "verdict": "VALID", "severity": "MEDIUM", "status": "FIXED", "rationale": "Cloudflare Pages did not consume nginx.conf; Pages-specific headers are now in public/_headers." },
+    { "id": "DEP-001", "verdict": "VALID_WITH_PRODUCTION_REACHABILITY_LIMIT", "severity": "HIGH", "status": "OPEN", "rationale": "npm audit advisories are current for locked dependencies; affected packages are development/build tooling, not the deployed browser bundle." },
+    { "id": "DEP-002", "verdict": "VALID_WITH_SCOPE_LIMIT", "severity": "HIGH", "status": "OPEN", "rationale": "Vite/esbuild advisories affect the development server. The server is configured to listen on all interfaces, but production deploys static files only." }
+  ],
+  "secret_scan": "No recognized secrets found in tracked source files or searched Git history."
+}

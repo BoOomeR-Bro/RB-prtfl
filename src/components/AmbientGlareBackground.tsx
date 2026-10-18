@@ -85,130 +85,169 @@ export function AmbientGlareBackground() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
+    let dispose: (() => void) | undefined;
+    let startupFrame = 0;
+    let idleHandle: number | undefined;
+    let fallbackTimer = 0;
+    let cancelled = false;
 
-    const gl = canvas.getContext('webgl', {
-      alpha: true,
-      antialias: false,
-      premultipliedAlpha: true,
-      preserveDrawingBuffer: false,
-    });
-    if (!gl) return;
+    const initialize = () => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
 
-    let program: WebGLProgram;
-    try {
-      program = createProgram(gl);
-    } catch {
-      return;
-    }
+      const gl = canvas.getContext('webgl', {
+        alpha: true,
+        antialias: false,
+        premultipliedAlpha: true,
+        preserveDrawingBuffer: false,
+      });
+      if (!gl) return;
 
-    const buffer = gl.createBuffer();
-    if (!buffer) {
-      gl.deleteProgram(program);
-      return;
-    }
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
-    gl.bufferData(
-      gl.ARRAY_BUFFER,
-      new Float32Array([
-        -1, -1, 0, 1, 1, -1, 1, 1, -1, 1, 0, 0,
-        -1, 1, 0, 0, 1, -1, 1, 1, 1, 1, 1, 0,
-      ]),
-      gl.STATIC_DRAW,
-    );
-
-    const position = gl.getAttribLocation(program, 'a_pos');
-    const uv = gl.getAttribLocation(program, 'a_uv');
-    const motion = gl.getUniformLocation(program, 'u_motion');
-    const blue = gl.getUniformLocation(program, 'u_blue');
-    const pink = gl.getUniformLocation(program, 'u_pink');
-    const orange = gl.getUniformLocation(program, 'u_orange');
-    if ([motion, blue, pink, orange].some((uniform) => uniform === null)) {
-      gl.deleteBuffer(buffer);
-      gl.deleteProgram(program);
-      return;
-    }
-
-    gl.useProgram(program);
-    gl.enableVertexAttribArray(position);
-    gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 16, 0);
-    gl.enableVertexAttribArray(uv);
-    gl.vertexAttribPointer(uv, 2, gl.FLOAT, false, 16, 8);
-    gl.disable(gl.DEPTH_TEST);
-
-    let raf = 0;
-    let lastDrawAt = 0;
-    let startedAt = performance.now();
-    let visible = !document.hidden;
-    let progressOffset = 0;
-    const frameInterval = 1000 / 30;
-    const duration = 14;
-    const colors = {
-      blue: [0.56, 0.82, 0.67, 0.62],
-      pink: [0.75, 0.88, 0.72, 0.48],
-      orange: [0.87, 0.91, 0.68, 0.4],
-    } as const;
-
-    const resize = () => {
-      const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
-      const width = Math.max(1, Math.floor(canvas.clientWidth * dpr));
-      const height = Math.max(1, Math.floor(canvas.clientHeight * dpr));
-      if (canvas.width !== width || canvas.height !== height) {
-        canvas.width = width;
-        canvas.height = height;
-      }
-      gl.viewport(0, 0, width, height);
-    };
-
-    const frame = (now: number) => {
-      raf = 0;
-      if (!visible) return;
-      if (now - lastDrawAt < frameInterval) {
-        raf = window.requestAnimationFrame(frame);
+      let program: WebGLProgram;
+      try {
+        program = createProgram(gl);
+      } catch {
         return;
       }
-      lastDrawAt = now;
-      const progress = ((now - startedAt) / (duration * 1000) + progressOffset) % 1;
-      gl.clearColor(0, 0, 0, 0);
-      gl.clear(gl.COLOR_BUFFER_BIT);
-      gl.uniform4f(motion, progress, 82, 0.82, 0.95);
-      gl.uniform4f(blue, ...colors.blue);
-      gl.uniform4f(pink, ...colors.pink);
-      gl.uniform4f(orange, ...colors.orange);
-      gl.drawArrays(gl.TRIANGLES, 0, 6);
-      raf = window.requestAnimationFrame(frame);
+
+      const buffer = gl.createBuffer();
+      if (!buffer) {
+        gl.deleteProgram(program);
+        return;
+      }
+
+      gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+      gl.bufferData(
+        gl.ARRAY_BUFFER,
+        new Float32Array([
+          -1, -1, 0, 1, 1, -1, 1, 1, -1, 1, 0, 0,
+          -1, 1, 0, 0, 1, -1, 1, 1, 1, 1, 1, 0,
+        ]),
+        gl.STATIC_DRAW,
+      );
+
+      const position = gl.getAttribLocation(program, 'a_pos');
+      const uv = gl.getAttribLocation(program, 'a_uv');
+      const motion = gl.getUniformLocation(program, 'u_motion');
+      const blue = gl.getUniformLocation(program, 'u_blue');
+      const pink = gl.getUniformLocation(program, 'u_pink');
+      const orange = gl.getUniformLocation(program, 'u_orange');
+      if ([motion, blue, pink, orange].some((uniform) => uniform === null)) {
+        gl.deleteBuffer(buffer);
+        gl.deleteProgram(program);
+        return;
+      }
+
+      gl.useProgram(program);
+      gl.enableVertexAttribArray(position);
+      gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 16, 0);
+      gl.enableVertexAttribArray(uv);
+      gl.vertexAttribPointer(uv, 2, gl.FLOAT, false, 16, 8);
+      gl.disable(gl.DEPTH_TEST);
+
+      let raf = 0;
+      let lastDrawAt = 0;
+      let startedAt = performance.now();
+      let visible = !document.hidden;
+      let progressOffset = 0;
+      const frameInterval = 1000 / 30;
+      const duration = 14;
+      const colors = {
+        blue: [0.56, 0.82, 0.67, 0.62],
+        pink: [0.75, 0.88, 0.72, 0.48],
+        orange: [0.87, 0.91, 0.68, 0.4],
+      } as const;
+
+      const resize = () => {
+        const dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+        const width = Math.max(1, Math.floor(canvas.clientWidth * dpr));
+        const height = Math.max(1, Math.floor(canvas.clientHeight * dpr));
+        if (canvas.width !== width || canvas.height !== height) {
+          canvas.width = width;
+          canvas.height = height;
+        }
+        gl.viewport(0, 0, width, height);
+      };
+
+      const frame = (now: number) => {
+        raf = 0;
+        if (!visible) return;
+        if (now - lastDrawAt < frameInterval) {
+          raf = window.requestAnimationFrame(frame);
+          return;
+        }
+        lastDrawAt = now;
+        const progress = ((now - startedAt) / (duration * 1000) + progressOffset) % 1;
+        gl.clearColor(0, 0, 0, 0);
+        gl.clear(gl.COLOR_BUFFER_BIT);
+        gl.uniform4f(motion, progress, 82, 0.82, 0.95);
+        gl.uniform4f(blue, ...colors.blue);
+        gl.uniform4f(pink, ...colors.pink);
+        gl.uniform4f(orange, ...colors.orange);
+        gl.drawArrays(gl.TRIANGLES, 0, 6);
+        raf = window.requestAnimationFrame(frame);
+      };
+
+      const start = () => {
+        if (visible && !raf) raf = window.requestAnimationFrame(frame);
+      };
+      const onVisibilityChange = () => {
+        if (document.hidden) {
+          visible = false;
+          progressOffset = ((performance.now() - startedAt) / (duration * 1000) + progressOffset) % 1;
+          if (raf) window.cancelAnimationFrame(raf);
+          raf = 0;
+        } else {
+          visible = true;
+          startedAt = performance.now();
+          start();
+        }
+      };
+
+      const observer = new ResizeObserver(resize);
+      observer.observe(canvas);
+      document.addEventListener('visibilitychange', onVisibilityChange);
+      resize();
+      start();
+
+      return () => {
+        if (raf) window.cancelAnimationFrame(raf);
+        observer.disconnect();
+        document.removeEventListener('visibilitychange', onVisibilityChange);
+        gl.deleteBuffer(buffer);
+        gl.deleteProgram(program);
+      };
     };
 
-    const start = () => {
-      if (visible && !raf) raf = window.requestAnimationFrame(frame);
-    };
-    const onVisibilityChange = () => {
-      if (document.hidden) {
-        visible = false;
-        progressOffset = ((performance.now() - startedAt) / (duration * 1000) + progressOffset) % 1;
-        if (raf) window.cancelAnimationFrame(raf);
-        raf = 0;
+    const startWhenIdle = () => {
+      if (cancelled) return;
+      const idleWindow = window as typeof window & {
+        requestIdleCallback?: (callback: () => void, options?: { timeout: number }) => number;
+        cancelIdleCallback?: (handle: number) => void;
+      };
+
+      if (idleWindow.requestIdleCallback) {
+        idleHandle = idleWindow.requestIdleCallback(() => {
+          if (!cancelled) dispose = initialize();
+        }, { timeout: 1200 });
       } else {
-        visible = true;
-        startedAt = performance.now();
-        start();
+        fallbackTimer = window.setTimeout(() => {
+          if (!cancelled) dispose = initialize();
+        }, 300);
       }
     };
 
-    const observer = new ResizeObserver(resize);
-    observer.observe(canvas);
-    document.addEventListener('visibilitychange', onVisibilityChange);
-    resize();
-    start();
+    startupFrame = window.requestAnimationFrame(() => {
+      startupFrame = window.requestAnimationFrame(startWhenIdle);
+    });
 
     return () => {
-      if (raf) window.cancelAnimationFrame(raf);
-      observer.disconnect();
-      document.removeEventListener('visibilitychange', onVisibilityChange);
-      gl.deleteBuffer(buffer);
-      gl.deleteProgram(program);
+      cancelled = true;
+      if (startupFrame) window.cancelAnimationFrame(startupFrame);
+      if (fallbackTimer) window.clearTimeout(fallbackTimer);
+      const idleWindow = window as typeof window & { cancelIdleCallback?: (handle: number) => void };
+      if (idleHandle !== undefined) idleWindow.cancelIdleCallback?.(idleHandle);
+      dispose?.();
     };
   }, []);
 

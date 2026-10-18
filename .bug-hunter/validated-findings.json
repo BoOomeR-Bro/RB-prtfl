@@ -1,0 +1,30 @@
+{
+  "generated": "2026-10-18T11:50:00+05:00",
+  "validations": [
+    {
+      "id": "DEP-001",
+      "verdict": "CONFIRMED_DEPENDENCY_ADVISORIES_LIMITED_TO_BUILD_TOOLING",
+      "external_reachability": "UNREACHABLE_IN_PRODUCTION_RUNTIME",
+      "internal_reachability": "REACHABLE_DURING_BUILD_OR_DEVELOPMENT",
+      "attacker_controlled_input": "No remote/runtime input path found; exploitation would need hostile input to reach package processing during local development/build.",
+      "mitigations": ["Static production build", "No backend or runtime Tailwind dependency"],
+      "residual_risk": "Keep dependencies updated; do not treat static-site isolation as a reason to ignore developer/build environment risk."
+    },
+    {
+      "id": "DEP-002",
+      "verdict": "CONFIRMED_DEV_SERVER_ADVISORIES",
+      "external_reachability": "INTERNAL_NETWORK_WHILE_DEV_SERVER_RUNNING",
+      "internal_reachability": "REACHABLE",
+      "attacker_controlled_input": "A remote website or reachable network peer may interact with an exposed Vite dev server depending on the specific advisory and browser/network conditions.",
+      "mitigations": ["Dev-only dependency", "Production is static output"],
+      "residual_risk": "vite.config.ts has host: true, increasing LAN exposure while npm run dev is active. Vite upgrade or binding to loopback reduces this risk."
+    },
+    {
+      "id": "SEC-001",
+      "verdict": "CONFIRMED_AND_FIXED",
+      "external_reachability": "EXTERNAL",
+      "mitigations": ["Cloudflare Pages response headers now declared in public/_headers"],
+      "residual_risk": "Confirm deployed response headers from the production URL after the next Pages deployment."
+    }
+  ]
+}

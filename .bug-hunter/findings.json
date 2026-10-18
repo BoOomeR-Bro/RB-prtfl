@@ -1,0 +1,48 @@
+{
+  "generated": "2026-10-18T11:50:00+05:00",
+  "scope": "full repository security review",
+  "findings": [
+    {
+      "id": "SEC-001",
+      "title": "Cloudflare Pages response security headers were missing",
+      "severity": "MEDIUM",
+      "status": "FIXED",
+      "confidence": 0.98,
+      "components": ["public/_headers"],
+      "evidence": "Nginx security headers existed only in nginx.conf; Cloudflare Pages serves dist and does not use that Nginx configuration.",
+      "impact": "The production Pages deployment lacked CSP, frame protection, MIME sniffing protection, referrer policy, permissions policy, and HSTS headers.",
+      "resolution": "Added Cloudflare Pages _headers with CSP and browser security headers. Inline styles remain permitted because the React interface uses style attributes and an inline scoped style block; scripts remain same-origin only."
+    },
+    {
+      "id": "DEP-001",
+      "title": "Vulnerable Tailwind CSS 3 dependency tree",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "confidence": 0.99,
+      "reachability": "INTERNAL",
+      "exploitability": "HARD",
+      "components": ["package.json", "package-lock.json", "postcss.config.js", "tailwind.config.js"],
+      "evidence": "npm audit reports Tailwind CSS 3.4.19 and transitive braces 3.0.3, chokidar 3.6.0, micromatch 4.0.8, postcss-nested 6.2.0, and postcss-selector-parser 6.1.4. Current application code has no backend and does not load these packages in the production browser runtime.",
+      "impact": "The affected packages are build/development tooling. Exploitation would require attacker-controlled patterns/selectors to reach the vulnerable tooling, so this is not an exposed production-site path based on the current static build.",
+      "resolution": "No dependency migration performed in this review; npm audit indicates the available Tailwind fix is a major upgrade to version 4."
+    },
+    {
+      "id": "DEP-002",
+      "title": "Vite 5 development-server vulnerabilities",
+      "severity": "HIGH",
+      "status": "OPEN",
+      "confidence": 0.99,
+      "reachability": "INTERNAL",
+      "exploitability": "MEDIUM",
+      "components": ["package.json", "package-lock.json", "vite.config.ts"],
+      "evidence": "npm audit reports Vite 5.4.21 affected by advisories through 6.4.2 and esbuild 0.21.5. vite.config.ts sets server.host to true, so the local development server listens beyond loopback interfaces. Vite is a devDependency and is not shipped in the production static assets.",
+      "impact": "Potential exposure is limited to a running development server on a reachable network; the production Cloudflare Pages site does not run Vite. One advisory is Windows-specific and does not apply to this macOS development host.",
+      "resolution": "No Vite major upgrade performed in this review; npm audit indicates the available fix is a major upgrade to Vite 8."
+    }
+  ],
+  "checks": {
+    "secret_scan": "No recognized credentials, private-key blocks, .env files, or credential files found in tracked working-tree files or searched Git history.",
+    "source_patterns": "No eval, Function constructor, child_process, or dangerouslySetInnerHTML found. localStorage use is limited to the color theme.",
+    "audit": "npm audit completed with 9 vulnerabilities: 6 high and 3 moderate across dependency tree."
+  }
+}

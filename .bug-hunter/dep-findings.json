@@ -1,0 +1,102 @@
+{
+  "scan_date": "2026-10-18T06:50:58.670Z",
+  "ecosystems": [
+    "node"
+  ],
+  "lockfiles": [
+    "package-lock.json"
+  ],
+  "findings": [
+    {
+      "id": "DEP-001",
+      "ecosystem": "node",
+      "manager": "npm",
+      "lockfile": "package-lock.json",
+      "package": "braces",
+      "version": "*",
+      "severity": "HIGH",
+      "cve": "https://github.com/advisories/GHSA-vfj7-8cjw-p6xm",
+      "fixed_version": "4.3.3",
+      "title": "braces vulnerable to stack-exhaustion denial of service through deeply nested patterns",
+      "reachability": "NOT_REACHABLE",
+      "evidence": "No imports found in source files"
+    },
+    {
+      "id": "DEP-002",
+      "ecosystem": "node",
+      "manager": "npm",
+      "lockfile": "package-lock.json",
+      "package": "chokidar",
+      "version": "2.0.0 - 3.6.0",
+      "severity": "HIGH",
+      "cve": "N/A",
+      "fixed_version": "4.3.3",
+      "title": "braces",
+      "reachability": "NOT_REACHABLE",
+      "evidence": "No imports found in source files"
+    },
+    {
+      "id": "DEP-003",
+      "ecosystem": "node",
+      "manager": "npm",
+      "lockfile": "package-lock.json",
+      "package": "fast-glob",
+      "version": "*",
+      "severity": "HIGH",
+      "cve": "N/A",
+      "fixed_version": "unknown",
+      "title": "micromatch",
+      "reachability": "NOT_REACHABLE",
+      "evidence": "No imports found in source files"
+    },
+    {
+      "id": "DEP-004",
+      "ecosystem": "node",
+      "manager": "npm",
+      "lockfile": "package-lock.json",
+      "package": "micromatch",
+      "version": ">=0.2.0",
+      "severity": "HIGH",
+      "cve": "N/A",
+      "fixed_version": "4.3.3",
+      "title": "braces",
+      "reachability": "NOT_REACHABLE",
+      "evidence": "No imports found in source files"
+    },
+    {
+      "id": "DEP-005",
+      "ecosystem": "node",
+      "manager": "npm",
+      "lockfile": "package-lock.json",
+      "package": "tailwindcss",
+      "version": "<=0.0.0-oxide-insiders.ff2c25f || 0.5.0 - 3.4.19",
+      "severity": "HIGH",
+      "cve": "N/A",
+      "fixed_version": "4.3.3",
+      "title": "chokidar",
+      "reachability": "NOT_REACHABLE",
+      "evidence": "No imports found in source files"
+    },
+    {
+      "id": "DEP-006",
+      "ecosystem": "node",
+      "manager": "npm",
+      "lockfile": "package-lock.json",
+      "package": "vite",
+      "version": "<=6.4.2",
+      "severity": "HIGH",
+      "cve": "https://github.com/advisories/GHSA-4w7w-66w2-5vf9",
+      "fixed_version": "8.3.4",
+      "title": "Vite Vulnerable to Path Traversal in Optimized Deps `.map` Handling",
+      "reachability": "REACHABLE",
+      "evidence": "Imported in: /Users/ruslan/Anti/vite.config.ts"
+    }
+  ],
+  "summary": {
+    "total": 6,
+    "reachable": 1,
+    "potentially_reachable": 0,
+    "not_reachable": 5
+  },
+  "scan_errors": []
+}

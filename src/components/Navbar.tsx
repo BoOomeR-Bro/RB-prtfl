@@ -44,12 +44,12 @@ export const Navbar: React.FC<NavbarProps> = ({ themeToggle }) => {
   return (
     <>
     <motion.header
-      initial={{ y: -24, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
+      initial={{ y: -24 }}
+      animate={{ y: 0 }}
       transition={{ type: 'spring', stiffness: 100, damping: 20, delay: .1 }}
       className="top-bar-wrap"
     >
-      <a href="#hero" className="top-bar-logo" aria-label={profileData.name}>{profileData.shortLogo}</a>
+      <a href="#hero" className="top-bar-logo">{profileData.shortLogo}</a>
       <div className="top-bar-actions">
         {themeToggle}
         <a href={profileData.resume.downloadUrl} download={profileData.resume.fileName} className="glass-action resume-action">
@@ -58,8 +58,8 @@ export const Navbar: React.FC<NavbarProps> = ({ themeToggle }) => {
       </div>
     </motion.header>
     <motion.div
-      initial={{ y: 90, opacity: 0 }}
-      animate={{ y: atPageBottom ? 100 : 0, opacity: atPageBottom ? 0 : 1 }}
+      initial={{ y: 90 }}
+      animate={{ y: atPageBottom ? 100 : 0 }}
       transition={{ type: 'spring', stiffness: 130, damping: 22, delay: atPageBottom ? 0 : .2 }}
       style={{ pointerEvents: atPageBottom ? 'none' : 'auto' }}
       aria-hidden={atPageBottom}

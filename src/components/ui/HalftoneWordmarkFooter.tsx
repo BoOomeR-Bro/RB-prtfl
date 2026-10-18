@@ -65,8 +65,8 @@ const DEFAULT_COLUMNS: FooterColumn[] = [
   { title: 'Связаться', links: [] },
 ];
 
-const SANS_STACK = '"Inter", "Helvetica Neue", Arial, system-ui, sans-serif';
-const MONO_STACK = '"JetBrains Mono", "SF Mono", ui-monospace, Menlo, Consolas, monospace';
+const SANS_STACK = '-apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif';
+const MONO_STACK = 'ui-monospace, "SFMono-Regular", Menlo, Monaco, Consolas, monospace';
 
 export function hwfHex(hex: string) {
   const m = /^#?([0-9a-f]{3}|[0-9a-f]{6})$/i.exec((hex || '').trim());
