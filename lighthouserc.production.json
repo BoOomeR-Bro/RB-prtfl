@@ -2,10 +2,7 @@
   "ci": {
     "collect": {
       "url": ["https://rb-prtf.is-a.dev/"],
-      "numberOfRuns": 3,
-      "settings": {
-        "preset": "mobile"
-      }
+      "numberOfRuns": 3
     },
     "assert": {
       "assertions": {
