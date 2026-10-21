@@ -1,0 +1,57 @@
+name: Performance checks
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+  schedule:
+    - cron: "23 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  built-site:
+    name: Lighthouse on built site (mobile)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - run: npm run build
+      - name: Measure performance
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.json
+      - name: Save Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-built-${{ github.run_id }}
+          path: .lighthouseci
+          if-no-files-found: ignore
+          retention-days: 14
+
+  production-site:
+    name: Lighthouse on Cloudflare site (mobile)
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: Measure deployed site
+        run: npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.production.json
+      - name: Save production Lighthouse report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse-production-${{ github.run_id }}
+          path: .lighthouseci
+          if-no-files-found: ignore
+          retention-days: 30

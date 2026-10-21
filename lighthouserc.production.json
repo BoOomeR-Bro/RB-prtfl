@@ -1,0 +1,26 @@
+{
+  "ci": {
+    "collect": {
+      "url": ["https://rb-prtf.is-a.dev/"],
+      "numberOfRuns": 3,
+      "settings": {
+        "preset": "mobile"
+      }
+    },
+    "assert": {
+      "assertions": {
+        "categories:performance": ["warn", { "minScore": 0.85 }],
+        "first-contentful-paint": ["warn", { "maxNumericValue": 1800 }],
+        "largest-contentful-paint": ["warn", { "maxNumericValue": 2500 }],
+        "speed-index": ["warn", { "maxNumericValue": 3400 }],
+        "total-blocking-time": ["warn", { "maxNumericValue": 200 }],
+        "cumulative-layout-shift": ["warn", { "maxNumericValue": 0.1 }],
+        "server-response-time": ["warn", { "maxNumericValue": 800 }]
+      }
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": "./.lighthouseci"
+    }
+  }
+}

@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "perf:check": "npm run build && npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.json",
+    "perf:production": "npx --yes @lhci/cli@0.15.1 autorun --config=./lighthouserc.production.json"
   },
   "dependencies": {
     "clsx": "^2.1.1",

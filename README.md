@@ -160,3 +160,26 @@ docker run -d --name ruslan-portfolio -p 8080:80 --restart unless-stopped ruslan
 - `src/data/experience.ts` — места работы, периоды, обязанности.
 - `src/data/projects.ts` — реализованные проекты и инженерные кейсы.
 - `src/data/education.ts` — образование, курсы и языки.
+
+---
+
+## 📈 Контроль производительности
+
+GitHub Actions запускает мобильный Lighthouse CI на production-сборке при каждом PR и обновлении `main`. Еженедельный и ручной запуск дополнительно измеряют опубликованный сайт Cloudflare Pages. Отчёты доступны в артефактах соответствующего запуска Actions.
+
+Локально те же проверки запускаются командами `npm run perf:check` (сборка + Lighthouse) и `npm run perf:production` (опубликованный сайт; требуется доступ к сети).
+
+Пороговые цели Lighthouse пока выводятся как предупреждения: сначала собираем стабильную базовую линию, не блокируя сборки из-за шума лабораторных замеров.
+
+| Метрика | Цель |
+| --- | ---: |
+| Lighthouse Performance | ≥ 85/100 |
+| First Contentful Paint (FCP) | ≤ 1,8 с |
+| Largest Contentful Paint (LCP) | ≤ 2,5 с |
+| Speed Index | ≤ 3,4 с |
+| Total Blocking Time (TBT) | ≤ 200 мс |
+| Cumulative Layout Shift (CLS) | ≤ 0,1 |
+| Server response time (TTFB) | ≤ 800 мс |
+| Interaction to Next Paint (INP, p75 в реальном трафике) | ≤ 200 мс |
+
+`npm run build` по-прежнему проверяет типы и собирает сайт; Lighthouse запускается отдельно в CI и не меняет код страницы. INP оценивай по полевым данным Cloudflare Web Analytics: Lighthouse TBT — лабораторный диагностический показатель, а не замена INP. Малое число визитов и отсутствие мобильных сессий пока не дают надёжного полевого сравнения.
